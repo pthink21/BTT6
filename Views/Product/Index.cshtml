@@ -1,0 +1,47 @@
+@model IEnumerable<BTT6.Models.Product>
+
+<h2 class="page-title">Sản phẩm</h2>
+
+<div class="row">
+    <div class="col-md-3">
+        <h5 class="fw-bold mb-3">Chủ đề</h5>
+        <div class="list-group sidebar-category">
+            <a asp-action="Index" class="list-group-item list-group-item-action @(ViewBag.SelectedCategoryId == null ? "active" : "")">
+                Tất cả
+            </a>
+            @foreach (var cat in (IEnumerable<BTT6.Models.Category>)ViewBag.Categories)
+            {
+                <a asp-action="Index" asp-route-categoryId="@cat.CategoryId"
+                   class="list-group-item list-group-item-action @(ViewBag.SelectedCategoryId != null && (int)ViewBag.SelectedCategoryId == cat.CategoryId ? "active" : "")">
+                    @cat.CategoryName
+                </a>
+            }
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <span class="category-badge mb-2 d-inline-block">@item.Category?.CategoryName</span>
+                            <h5 class="card-title mt-2">@item.ProductName</h5>
+                            <p class="card-text text-muted small">@item.Description</p>
+                            <p class="price-tag">@item.Price.ToString("N0") VNĐ</p>
+                        </div>
+                        <div class="card-footer">
+                            <a asp-action="Details" asp-route-id="@item.ProductId" class="btn btn-info btn-sm w-100">Xem chi tiết</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        @if (!Model.Any())
+        {
+            <div class="text-center py-5">
+                <h5 class="text-muted">Không có sản phẩm nào trong chủ đề này.</h5>
+            </div>
+        }
+    </div>
+</div>
